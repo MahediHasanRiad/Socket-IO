@@ -2,9 +2,9 @@ import { useState } from "react";
 import ChatButtom from "./components/chat-buttom";
 import ChatTop from "./components/chat-top";
 import UserCard from "./components/user-card";
-import { UserData } from "./data/user";
+import { UserData } from "../data/user";
 
-function App() {
+function Chat() {
   const [user, setUser] = useState(null);
 
   const getData = (data) => {
@@ -55,4 +55,4 @@ function App() {
   );
 }
 
-export default App;
+export default Chat;
