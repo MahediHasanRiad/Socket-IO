@@ -1,9 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { createServer } from "http";
-import { Server } from "socket.io";
 import cookieParser from 'cookie-parser'
-import { registerController } from "./auth/controllers/register.controller.js";
+import { authRouter } from "./auth/routers/auth.router";
 
 const app = express();
 
@@ -15,7 +13,7 @@ app.use(cookieParser())
 
 
 // routers
-app.use('/auth', registerController)
+app.use('/auth', authRouter)
 
 
 
