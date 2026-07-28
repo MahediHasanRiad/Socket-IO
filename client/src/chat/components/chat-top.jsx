@@ -1,12 +1,7 @@
-import React from 'react'
 
-interface ChatTopType {
-    img: string;
-    name: string;
-    status: string;
-}
 
-function ChatTop({ img, name, status }: ChatTopType) {
+
+function ChatTop({ img, name, status }) {
     return (
         <div className="bg-[#005c4b] text-white px-4 py-2.5 flex items-center justify-between shadow-md">
             <div className="flex items-center space-x-3 min-w-0">

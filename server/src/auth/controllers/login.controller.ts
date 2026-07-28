@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 export const LoginController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  if(!email || !password) throw Error('Email and Password both are required !')
+
   const emailExist = await prisma.user.findFirst({ where: { email: email } });
   if (!emailExist) throw Error("User not found !!!");
 

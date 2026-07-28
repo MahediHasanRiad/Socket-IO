@@ -1,17 +1,13 @@
-import React, { useEffect } from 'react'
+// import emptyImage from '../../asset/empty-profile.png'
 
-interface UserCardType {
-    user: any;
-    selectuser?: (v: any) => void
-}
 
-function UserCard({ user, selectuser }: UserCardType) {
+function UserCard({ user, selectuser }) {
 
     return (
         <div onClick={() => selectuser?.(user)} className="flex items-center justify-between p-3 px-4 border-t border-gray-200 bg-white hover:bg-gray-50 transition-colors cursor-pointer select-none">
             <div className="flex items-center space-x-3.5 min-w-0 pr-2">
                 <img
-                    src={user?.avatarUrl}
+                    src={'../../asset/empty-profile.png'}
                     alt="{name}'s avatar"
                     className="w-12 h-12 rounded-full object-cover flex-shrink-0"
                 />

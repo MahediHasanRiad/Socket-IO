@@ -1,25 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChatButtom from "./components/chat-buttom";
 import ChatTop from "./components/chat-top";
 import UserCard from "./components/user-card";
-import { UserData } from "../data/user";
+import axios from "axios";
+import { io } from "socket.io-client";
+import { useSelector } from "react-redux";
 
 function Chat() {
   const [user, setUser] = useState(null);
+  const [allUser, setAllUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const getData = (data) => {
-    setUser(data);
+  const {user: loginUser} = useSelector((state) => state.auth)
+
+  const socket = io("http://localhost:3000");
+
+  socket.on("connect", () => {
+    console.log(socket.id);
+  });
+
+  useEffect(() => {
+    const fetchInitialUser = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/auth/all-user`,
+        );
+        setAllUser(response.data);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchInitialUser();
+  }, []);
+
+  const getData = (selectedUser) => {
+    setUser(selectedUser);
   };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        Loading chat...
+      </div>
+    );
+  }
 
   return (
     <section className="flex">
-      {/* right site -- all users  */}
+      {/* Left side -- all users */}
       <section className="w-[20%] border-r space-y-3">
-        {UserData.map((user) => (
-          <UserCard key={user.name} user={user} selectuser={getData} />
+        {allUser?.users?.map((u) => (
+          <UserCard key={u.name} user={u} selectuser={getData} />
         ))}
       </section>
-      {/* right site chat  */}
+
+      {/* Right side -- chat */}
       <section className="w-[80%] h-screen flex flex-col bg-[#efeae2]">
         {/* Top Header - Fixed height */}
         <header className="flex-shrink-0">
@@ -32,7 +69,6 @@ function Chat() {
 
         {/* Middle Scrollable Messages Area */}
         <main className="flex-1 overflow-y-auto p-4 space-y-3">
-          {/* Chat messages will render here */}
           {user ? (
             <div className="flex justify-center my-2">
               <span className="bg-white/80 text-gray-600 text-xs px-3 py-1 rounded-md shadow-sm">

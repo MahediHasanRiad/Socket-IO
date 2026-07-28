@@ -1,64 +1,48 @@
-import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import { RegisterFormValues } from "./schema";
+import axios from "axios";
+import {useNavigate} from 'react-router'
+import { useDispatch } from "react-redux";
+import { loginUser } from "./redux/auth.slice";
 
-export function RegisterForm() {
+
+export function LoginForm() {
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterFormValues>({
+  } = useForm({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: RegisterFormValues) => {
-    console.log("Form Submitted:", data);
+  const navigate = useNavigate()
+  const dispatch = useDispatch();
+
+  const onSubmit = async (d) => {
+    try {
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, d).then(() => {
+        navigate('/')
+      })
+      await dispatch(loginUser(d))
+
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-md border border-gray-100 p-6">
       {/* Header */}
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Create an account</h2>
+        <h2 className="text-xl font-bold text-gray-900">Welcome back</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Enter your details below to register
+          Enter your credentials to access your account
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Name Field */}
-        <div className="flex flex-col space-y-1.5">
-          <label htmlFor="name" className="text-sm font-medium text-gray-700">
-            Name
-          </label>
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <input
-                {...field}
-                id="name"
-                type="text"
-                placeholder="John Doe"
-                className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-                  errors.name
-                    ? "border-red-500 focus:ring-red-200"
-                    : "border-gray-300 focus:border-gray-900 focus:ring-gray-100"
-                }`}
-              />
-            )}
-          />
-          {errors.name && (
-            <span className="text-xs text-red-500 mt-1">
-              {errors.name.message}
-            </span>
-          )}
-        </div>
-
         {/* Email Field */}
         <div className="flex flex-col space-y-1.5">
           <label htmlFor="email" className="text-sm font-medium text-gray-700">
@@ -90,12 +74,20 @@ export function RegisterForm() {
 
         {/* Password Field */}
         <div className="flex flex-col space-y-1.5">
-          <label
-            htmlFor="password"
-            className="text-sm font-medium text-gray-700"
-          >
-            Password
-          </label>
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <a
+              href="#"
+              className="text-xs text-gray-600 hover:text-black transition-colors"
+            >
+              Forgot password?
+            </a>
+          </div>
           <Controller
             name="password"
             control={control}
@@ -126,7 +118,7 @@ export function RegisterForm() {
           disabled={isSubmitting}
           className="w-full mt-2 py-2 px-4 bg-gray-900 hover:bg-black text-white text-sm font-medium rounded-lg shadow transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Registering..." : "Register"}
+          {isSubmitting ? "Signing in..." : "Sign in"}
         </button>
       </form>
     </div>
