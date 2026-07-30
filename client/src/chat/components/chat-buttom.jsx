@@ -1,6 +1,8 @@
 import { Image, Send } from 'lucide-react';
 
-function ChatButtom() {
+
+
+function ChatButtom({getMessage, sendMessageHandler, sendMessage}) {
   return (
     <div className="relative w-full mx-auto flex flex-col justify-end pb-2 font-sans overflow-hidden">
   
@@ -22,6 +24,8 @@ function ChatButtom() {
         type="text" 
         placeholder="" 
         className="w-full bg-transparent text-sm text-gray-800 focus:outline-none pr-6"
+        value={sendMessage}
+        onChange={(e) => getMessage(e.target.value)}
       />
     </div>
 
@@ -29,7 +33,7 @@ function ChatButtom() {
        <Image />
     </button>
 
-    <button type="button" className="cursor-pointer p-1.5 text-gray-800 hover:text-black transition-colors flex-shrink-0">
+    <button onClick={sendMessageHandler} type="button" className="cursor-pointer p-1.5 text-gray-800 hover:text-black transition-colors flex-shrink-0">
       <Send />
     </button>
   </div>

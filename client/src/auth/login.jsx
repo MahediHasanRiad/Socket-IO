@@ -21,16 +21,19 @@ export function LoginForm() {
   const dispatch = useDispatch();
 
   const onSubmit = async (d) => {
-    try {
-      await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, d).then(() => {
-        navigate('/')
-      })
-      await dispatch(loginUser(d))
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/login`, d);
+    const loginData = response.data;
 
-    } catch (error) {
-      console.error(error)
-    }
-  };
+    console.log('Login successful:', loginData);
+
+    await dispatch(loginUser(loginData));
+    navigate('/');
+
+  } catch (error) {
+    console.error('Login failed:', error);
+  }
+};
 
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-xl shadow-md border border-gray-100 p-6">

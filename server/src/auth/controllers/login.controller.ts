@@ -21,5 +21,5 @@ export const LoginController = asyncHandler(async (req, res) => {
     { expiresIn: `${process.env.ACCESS_TOKEN_EXPIREIN}`} as any,
   );
 
-  res.status(200).cookie('accessToken', accessToken).json({data: emailExist})
+  res.status(200).cookie('accessToken', accessToken).json({data: emailExist, token: accessToken})
 });
